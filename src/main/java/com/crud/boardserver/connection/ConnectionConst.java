@@ -1,4 +1,4 @@
-package com.crud.boardserver.conection;
+package com.crud.boardserver.connection;
 
 public abstract class ConnectionConst {
     public static final String URL = "jdbc:h2:tcp://localhost/~/test";
