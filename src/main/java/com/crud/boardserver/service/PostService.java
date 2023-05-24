@@ -21,11 +21,23 @@ public class PostService {
         id++;
 
         Post post = new Post();
-        post.setId(id);
+        post.setPostId(id);
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
 
         return postRepository.save(post);
+    }
 
+    public PostDTO findPost(Integer postId) throws SQLException {
+
+        Post post = postRepository.findById(postId);
+
+        PostDTO postDTO = new PostDTO();
+        postDTO.setPostId(postId);
+        postDTO.setTitle(post.getTitle());
+        postDTO.setContent(post.getContent());
+
+        return postDTO;
     }
 }
+

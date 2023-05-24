@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Post {
 
-    private Integer id;
+    private Integer postId;
     private String title;
     private String content;
 

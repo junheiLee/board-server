@@ -2,14 +2,15 @@ package com.crud.boardserver.repository;
 
 import com.crud.boardserver.connection.DBConnectionUtil;
 import com.crud.boardserver.domain.Post;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.NoSuchElementException;
 
+@Slf4j
 @Repository
 public class PostRepository {
-
-
 
     public Post save(Post post) throws SQLException {
         String sql = "insert into posts(id, title, content) values(?, ?, ?)";
@@ -20,7 +21,7 @@ public class PostRepository {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, post.getId());
+            pstmt.setInt(1, post.getPostId());
             pstmt.setString(2, post.getTitle());
             pstmt.setString(3, post.getContent());
             pstmt.executeUpdate();
@@ -32,11 +33,45 @@ public class PostRepository {
         }
     }
 
+    public Post findById(Integer postId) throws SQLException {
+        String sql = "select * from posts where postId = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, postId);
+
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Post post = new Post();
+                post.setPostId(rs.getInt("postId"));
+                post.setTitle(rs.getString("title"));
+                post.setContent(rs.getString("content"));
+
+                return post;
+            } else {
+                throw new NoSuchElementException("post not fond postId=" + postId);
+            }
+
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, rs);
+        }
+    }
+
+
     private void close(Connection con, Statement stmt, ResultSet rs) {
         if (rs != null) {
             try {
                 rs.close();
             } catch (SQLException e) {
+                log.error("db error", e);
             }
         }
 
@@ -44,7 +79,7 @@ public class PostRepository {
             try {
                 stmt.close();
             } catch (SQLException e) {
-
+                log.error("db error", e);
             }
         }
 
@@ -52,6 +87,7 @@ public class PostRepository {
             try {
                 con.close();
             } catch (SQLException e) {
+                log.error("db error", e);
             }
         }
     }

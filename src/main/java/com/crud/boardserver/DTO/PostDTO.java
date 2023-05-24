@@ -7,7 +7,7 @@ import lombok.Setter;
 public class PostDTO {
 
     //작성일, 작성자 추가해보기
-    private Integer id;
+    private Integer postId;
     private String title;
     private String content;
 
