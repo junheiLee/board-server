@@ -1,12 +1,12 @@
 package com.crud.boardserver.service;
 
 import com.crud.boardserver.DTO.PostDTO;
-import com.crud.boardserver.domain.Post;
 import com.crud.boardserver.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 public class PostService {
@@ -16,28 +16,19 @@ public class PostService {
 
     private Integer id = 0;
 
-    public Post savePost(PostDTO postDTO) throws SQLException {
+    public List<PostDTO> findAllPosts() throws SQLException{
+        return postRepository.findAll();
+    }
 
+    public PostDTO savePost(PostDTO postDTO) throws SQLException {
         id++;
+        postDTO.setPostId(id);
 
-        Post post = new Post();
-        post.setPostId(id);
-        post.setTitle(postDTO.getTitle());
-        post.setContent(postDTO.getContent());
-
-        return postRepository.save(post);
+        return postRepository.save(postDTO);
     }
 
     public PostDTO findPost(Integer postId) throws SQLException {
-
-        Post post = postRepository.findById(postId);
-
-        PostDTO postDTO = new PostDTO();
-        postDTO.setPostId(postId);
-        postDTO.setTitle(post.getTitle());
-        postDTO.setContent(post.getContent());
-
-        return postDTO;
+        return postRepository.findById(postId);
     }
 }
 

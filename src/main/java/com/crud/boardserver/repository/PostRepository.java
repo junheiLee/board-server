@@ -1,18 +1,20 @@
 package com.crud.boardserver.repository;
 
+import com.crud.boardserver.DTO.PostDTO;
 import com.crud.boardserver.connection.DBConnectionUtil;
-import com.crud.boardserver.domain.Post;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
 @Repository
 public class PostRepository {
 
-    public Post save(Post post) throws SQLException {
+    public PostDTO save(PostDTO postDTO) throws SQLException {
         String sql = "insert into post(postId, title, content) values(?, ?, ?)";
 
         Connection con = null;
@@ -21,11 +23,11 @@ public class PostRepository {
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, post.getPostId());
-            pstmt.setString(2, post.getTitle());
-            pstmt.setString(3, post.getContent());
+            pstmt.setInt(1, postDTO.getPostId());
+            pstmt.setString(2, postDTO.getTitle());
+            pstmt.setString(3, postDTO.getContent());
             pstmt.executeUpdate();
-            return post;
+            return postDTO;
         } catch (SQLException e) {
             throw e;
         } finally {
@@ -33,7 +35,7 @@ public class PostRepository {
         }
     }
 
-    public Post findById(Integer postId) throws SQLException {
+    public PostDTO findById(Integer postId) throws SQLException {
         String sql = "select * from post where postId = ?";
 
         Connection con = null;
@@ -47,16 +49,48 @@ public class PostRepository {
 
             rs = pstmt.executeQuery();
             if (rs.next()) {
-                Post post = new Post();
-                post.setPostId(rs.getInt("postId"));
-                post.setTitle(rs.getString("title"));
-                post.setContent(rs.getString("content"));
+                PostDTO postDTO = new PostDTO();
+                postDTO.setPostId(rs.getInt("postId"));
+                postDTO.setTitle(rs.getString("title"));
+                postDTO.setContent(rs.getString("content"));
 
-                return post;
+                return postDTO;
             } else {
                 throw new NoSuchElementException("post not fond postId=" + postId);
             }
 
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, rs);
+        }
+    }
+
+    public List<PostDTO> findAll() throws SQLException {
+        String sql = "select * from post";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            List<PostDTO> posts = new ArrayList<>();
+            PostDTO postDTO = new PostDTO();
+            while (rs.next()) {
+
+                postDTO.setPostId(rs.getInt("postId"));
+                postDTO.setTitle(rs.getString("title"));
+                postDTO.setContent(rs.getString("content"));
+
+                posts.add(postDTO);
+            }
+
+            return posts;
         } catch (SQLException e) {
             log.error("db error", e);
             throw e;
