@@ -3,6 +3,8 @@ package com.crud.boardserver.DTO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter @Setter
 public class PostDTO {
 
@@ -10,5 +12,6 @@ public class PostDTO {
     private Integer postId;
     private String title;
     private String content;
+    private Date date;
 
 }

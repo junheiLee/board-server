@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 public class PostRepository {
 
     public PostDTO save(PostDTO postDTO) throws SQLException {
-        String sql = "insert into post(postId, title, content) values(?, ?, ?)";
+        String sql = "insert into post(postId, title, content, now) values(?, ?, ?, now())";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -53,6 +53,7 @@ public class PostRepository {
                 postDTO.setPostId(rs.getInt("postId"));
                 postDTO.setTitle(rs.getString("title"));
                 postDTO.setContent(rs.getString("content"));
+                postDTO.setDate(rs.getDate("now"));
 
                 return postDTO;
             } else {
@@ -88,6 +89,7 @@ public class PostRepository {
                 postDTO.setPostId(rs.getInt("postId"));
                 postDTO.setTitle(rs.getString("title"));
                 postDTO.setContent(rs.getString("content"));
+                postDTO.setDate(rs.getDate("now"));
 
                 posts.add(postDTO);
             }
