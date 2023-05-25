@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 public class PostRepository {
 
     public Post save(Post post) throws SQLException {
-        String sql = "insert into posts(id, title, content) values(?, ?, ?)";
+        String sql = "insert into post(postId, title, content) values(?, ?, ?)";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -34,7 +34,7 @@ public class PostRepository {
     }
 
     public Post findById(Integer postId) throws SQLException {
-        String sql = "select * from posts where postId = ?";
+        String sql = "select * from post where postId = ?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
