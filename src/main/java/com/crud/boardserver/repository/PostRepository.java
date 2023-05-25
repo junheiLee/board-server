@@ -80,8 +80,10 @@ public class PostRepository {
             rs = pstmt.executeQuery();
 
             List<PostDTO> posts = new ArrayList<>();
-            PostDTO postDTO = new PostDTO();
+
             while (rs.next()) {
+
+                PostDTO postDTO = new PostDTO();
 
                 postDTO.setPostId(rs.getInt("postId"));
                 postDTO.setTitle(rs.getString("title"));
