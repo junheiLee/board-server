@@ -26,7 +26,7 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<PostDTO> savePost(@RequestParam String title, @RequestParam String content) throws SQLException {
+    public ResponseEntity<PostDTO> savePost(@RequestParam String title, String content) throws SQLException {
 
         log.info("title={}, content={}", title, content);
 
@@ -40,6 +40,12 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostDTO> findPost(@PathVariable Integer postId) throws SQLException{
         return new ResponseEntity<PostDTO>(postService.findPost(postId), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{postId}")
+    public void modifyPost(@RequestBody PostDTO updatedPost,
+                                          @PathVariable Integer postId) throws SQLException{
+        postService.modifyPost(updatedPost, postId);
     }
 
     @DeleteMapping("/{postId}")

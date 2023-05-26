@@ -31,6 +31,19 @@ public class PostService {
         return postRepository.findById(postId);
     }
 
+    public void modifyPost(PostDTO updatedPost, Integer postId) throws SQLException{
+        PostDTO postDTO = postRepository.findById(postId);
+
+        if (updatedPost.getTitle() != null) {
+            postDTO.setTitle(updatedPost.getTitle());
+        }
+        if (updatedPost.getContent() != null) {
+            postDTO.setContent(updatedPost.getContent());
+        }
+
+        postRepository.modify(postDTO, postId);
+    }
+
     public void deletePost(Integer postId) throws SQLException{
         postRepository.delete(postId);
     }

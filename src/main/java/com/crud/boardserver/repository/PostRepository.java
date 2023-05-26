@@ -104,6 +104,29 @@ public class PostRepository {
         }
     }
 
+    public void modify(PostDTO postDTO, Integer postId) throws SQLException{
+        String sql = "update post set title=?, content=? where postId=?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, postDTO.getTitle());
+            pstmt.setString(2, postDTO.getContent());
+            pstmt.setInt(3, postId);
+
+            int resultSize = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+
+    }
+
     public void delete(Integer postId) throws SQLException{
         String sql = "delete from post where postId=?";
 
