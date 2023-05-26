@@ -5,6 +5,7 @@ import com.crud.boardserver.connection.DBConnectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +102,27 @@ public class PostRepository {
         } finally {
             close(con, pstmt, rs);
         }
+    }
+
+    public void delete(Integer postId) throws SQLException{
+        String sql = "delete from post where postId=?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, postId);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+
     }
 
 

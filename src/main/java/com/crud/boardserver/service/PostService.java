@@ -30,5 +30,9 @@ public class PostService {
     public PostDTO findPost(Integer postId) throws SQLException {
         return postRepository.findById(postId);
     }
+
+    public void deletePost(Integer postId) throws SQLException{
+        postRepository.delete(postId);
+    }
 }
 

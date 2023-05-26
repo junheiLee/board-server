@@ -21,7 +21,7 @@ public class PostController {
     PostService postService;
 
     @GetMapping
-    public ResponseEntity<List<PostDTO>> posts() throws SQLException {
+    public ResponseEntity<List<PostDTO>> findAllPosts() throws SQLException {
         return new ResponseEntity<List<PostDTO>>(postService.findAllPosts(), HttpStatus.OK);
     }
 
@@ -38,7 +38,12 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDTO> readPost(@PathVariable Integer postId) throws SQLException{
+    public ResponseEntity<PostDTO> findPost(@PathVariable Integer postId) throws SQLException{
         return new ResponseEntity<PostDTO>(postService.findPost(postId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{postId}")
+    public void deletePost(@PathVariable Integer postId) throws SQLException{
+        postService.deletePost(postId);
     }
 }
