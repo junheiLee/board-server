@@ -43,8 +43,13 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}")
-    public void modifyPost(@RequestBody PostDTO updatedPost,
-                                          @PathVariable Integer postId) throws SQLException{
+    public void modifyPost(@RequestParam String title,
+                           @RequestParam String content,
+                           @PathVariable Integer postId) throws SQLException{
+        PostDTO updatedPost = new PostDTO();
+        updatedPost.setTitle(title);
+        updatedPost.setContent(content);
+
         postService.modifyPost(updatedPost, postId);
     }
 
